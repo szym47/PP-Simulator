@@ -57,4 +57,20 @@ internal class Creature
 
     public int Upgrade() => level < 10 ? ++level : level;
 
+    public void Go(Direction direction)
+    {
+        Console.WriteLine($"{name} goes {direction.ToString().ToLower()}.");
+    }
+    public void Go(Direction[] directions)
+    {
+        foreach (Direction direction in directions)
+        {
+            Go(direction);
+        }
+    }
+    public void Go(string directionsS)
+    {
+        Direction[] directions = DirectionParser.Parse(directionsS);
+        Go(directions);
+    }
 }
