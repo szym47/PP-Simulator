@@ -1,10 +1,12 @@
-﻿namespace Simulator;
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace Simulator;
 
 public class Orc : Creature
 {
     private int rage = 1;
     
-    public int Rage { get => rage; init => rage = value < 0 ? 0 : value > 10 ? 10 : value; }
+    public int Rage { get => rage; init => rage = Validator.Limiter(value, 0, 10); }
     
     private int count = 0;
     public void Hunt()
@@ -27,6 +29,8 @@ public class Orc : Creature
     {
         Rage = rage;
     }
+
+    public override string Info => $" {Name} [{Level}][{Rage}]";
     public override void SayHi() {
         Console.WriteLine($"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}");
     }
