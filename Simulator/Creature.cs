@@ -1,6 +1,6 @@
 ﻿namespace Simulator;
 
-internal class Creature
+public abstract class Creature
 {
 
     private string name = "Unknown";
@@ -40,20 +40,21 @@ internal class Creature
         }
     }
 
+    public abstract int Power { get; }
 
+
+    public Creature() { }
     public Creature(string name, int level = 1)
     {
         Name = name;
         Level = level >= 1 ? level : 1;
     }
 
-    public Creature() { }
-
-
     public string Info => $"{Name} [{Level}]";
 
-    public void SayHi() =>
-        Console.WriteLine($"Hi, I am {Name} and my level is {Level}.");
+
+
+    public abstract void SayHi();
 
     public int Upgrade() => level < 10 ? ++level : level;
 

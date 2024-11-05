@@ -2,7 +2,7 @@
 
 public static class DirectionParser
 {
-    internal static Direction[] Parse(string input)
+    public static Direction[] Parse(string input)
     {
         var directions = new List<Direction>();
         foreach (char d in input.ToUpper())

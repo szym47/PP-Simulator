@@ -1,6 +1,6 @@
 ﻿namespace Simulator;
 
-internal enum Direction
+public enum Direction
 {
     Up, Down, Right, Left
 }
