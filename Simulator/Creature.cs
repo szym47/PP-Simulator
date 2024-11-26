@@ -1,15 +1,19 @@
-﻿namespace Simulator;
+﻿using Simulator.Maps;
+namespace Simulator;
 
 public abstract class Creature
 {
+    public Map? Maps {  get; private set; }
+    public Point Position { get; private set; }
+
+    public void IinitMapAndPosition(Map map, Point position) { }
+
 
     private string name = "Unknown";
     public string Name
     {
         get => name;
-        init {
-            name = Validator.Shortener(value, 3, 25, '#');
-        }
+        init => name = Validator.Shortener(value, 3, 25, '#');
     }
 
     private int level = 1;
@@ -17,7 +21,6 @@ public abstract class Creature
     {
         get => level;
         init => level = Validator.Limiter(value, 1, 10);
-        
     }
 
     public abstract int Power { get; }
@@ -27,7 +30,7 @@ public abstract class Creature
     public Creature(string name, int level = 1)
     {
         Name = name;
-        Level = level >= 1 ? level : 1;
+        Level = level;
     }
 
     public abstract string Info {  get; }
@@ -40,14 +43,17 @@ public abstract class Creature
     public int Upgrade() => level < 10 ? ++level : level;
 
     public string Go(Direction direction) => $"{direction.ToString().ToLower()}";
-    public string[] Go(Direction[] directions)
+    public List<string> Go(List<Direction> directions)
     {
-        string[] result = new string[directions.Length];
-        for (int i = 0; i < directions.Length; i++)
-        {
-            result[i] = Go(directions[i]);
-        }
-        return result;
+        //Map.Next()
+        //Map.Next() == Position -> bez ruchu
+
+        // Map.Move() -> Remove w punkcie 1, Add w punkcie 2
+        var size = directions.Count;
+        var list = new List<string>(size);
+        for (int i = 0; i < size; i++) list[i]=Go(directions[i]);
+        return list;
     }
-    public string[] Go(string directionS) => Go(DirectionParser.Parse(directionS));
+
+    public List<string> Go(string s) => Go(DirectionParser.Parse(s));
 }

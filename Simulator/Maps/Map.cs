@@ -5,12 +5,36 @@
 /// </summary>
 public abstract class Map
 {
+    // Add()
+    // Remove()
+    // Move()
+    // At(Point) or x,y
+
+    private readonly Rectangle bounds;
+    public int SizeX { get; }
+    public int SizeY { get; }
+
+    protected Map(int sizeX, int sizeY)
+    {
+        if (sizeX < 5)
+        {
+            throw new ArgumentOutOfRangeException(nameof(sizeX), "Width too small");
+        }
+        if (sizeY < 5)
+        {
+            throw new ArgumentOutOfRangeException(nameof(sizeY), "Height too small");
+        }
+        SizeX = sizeX;
+        SizeY = sizeY;
+        bounds = new Rectangle(0, 0, SizeX - 1, SizeY - 1);
+    }
+
     /// <summary>
     /// Check if give point belongs to the map.
     /// </summary>
     /// <param name="p">Point to check.</param>
     /// <returns></returns>
-    public abstract bool Exist(Point p);
+    public virtual bool Exist(Point p) => bounds.Contains(p);
 
     /// <summary>
     /// Next position to the point in a given direction.
