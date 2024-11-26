@@ -5,10 +5,6 @@
 /// </summary>
 public abstract class Map
 {
-    // Add()
-    // Remove()
-    // Move()
-    // At(Point) or x,y
 
     private readonly Rectangle bounds;
     public int SizeX { get; }

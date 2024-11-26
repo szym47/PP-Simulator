@@ -4,9 +4,7 @@ namespace Simulator;
 public abstract class Creature
 {
     public Map? Maps {  get; private set; }
-    public Point Position { get; private set; }
-
-    public void IinitMapAndPosition(Map map, Point position) { }
+    public Point? Position { get; private set; }
 
 
     private string name = "Unknown";
@@ -35,25 +33,40 @@ public abstract class Creature
 
     public abstract string Info {  get; }
     public override string ToString() => $"{GetType().Name.ToUpper()} :{Info}";
-   
-
-
     public abstract string Greeting();
-
     public int Upgrade() => level < 10 ? ++level : level;
 
-    public string Go(Direction direction) => $"{direction.ToString().ToLower()}";
+    public void InitMapAndPosition(Map map, Point position)
+    {
+        if (!map.Exist(position))
+            throw new ArgumentOutOfRangeException(nameof(position), "Point is outside the map bounds");
+
+        Maps = map;
+        Position = position;
+
+        ((SmallMap) map).Add(this, position);
+    }
+    public void Go(Direction direction)
+    {
+        if (Maps == null || Position == null)
+            return;
+
+        var newPosition = Maps.Next(Position.Value, direction);
+        if (!newPosition.Equals(Position.Value))
+        {
+            ((SmallMap)Maps).Move(this, Position.Value, newPosition);
+            Position = newPosition;
+        }
+    }
     public List<string> Go(List<Direction> directions)
     {
-        //Map.Next()
-        //Map.Next() == Position -> bez ruchu
-
-        // Map.Move() -> Remove w punkcie 1, Add w punkcie 2
-        var size = directions.Count;
-        var list = new List<string>(size);
-        for (int i = 0; i < size; i++) list[i]=Go(directions[i]);
-        return list;
+        var result = new List<string>(directions.Count);
+        foreach (var direction in directions)
+        {
+            Go(direction);
+            result.Add(direction.ToString().ToLower());
+        }
+        return result;
     }
-
     public List<string> Go(string s) => Go(DirectionParser.Parse(s));
 }
