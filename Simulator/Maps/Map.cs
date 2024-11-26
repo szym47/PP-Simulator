@@ -9,7 +9,7 @@ public abstract class Map
     private readonly Rectangle bounds;
     public int SizeX { get; }
     public int SizeY { get; }
-
+    protected abstract List<Creature>?[,] Fields { get; }
     protected Map(int sizeX, int sizeY)
     {
         if (sizeX < 5)
