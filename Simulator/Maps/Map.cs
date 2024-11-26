@@ -48,4 +48,43 @@ public abstract class Map
     /// <param name="d">Direction.</param>
     /// <returns>Next point.</returns>
     public abstract Point NextDiagonal(Point p, Direction d);
+
+    public void Add(Creature creature, Point position)
+    {
+        if (!Exist(position))
+            throw new ArgumentOutOfRangeException(nameof(position), "Point is outside the map");
+
+        Fields[position.X, position.Y] ??= new List<Creature>();
+        Fields[position.X, position.Y]!.Add(creature);
+    }
+
+    public void Remove(Creature creature, Point position)
+    {
+        if (!Exist(position))
+            throw new ArgumentOutOfRangeException(nameof(position), "Point is outside the map");
+
+        Fields[position.X, position.Y] ??= new List<Creature>(); 
+        Fields[position.X, position.Y]!.Remove(creature);
+    }
+
+    public void Move(Creature creature, Point from, Point to)
+    {
+        if (!Exist(from) || !Exist(to))
+            throw new ArgumentOutOfRangeException("Source or destination point is outside the map");
+
+        Remove(creature, from);
+        Add(creature, to);
+    }
+
+    public List<Creature> At(Point position)
+    {
+        if (!Exist(position))
+            throw new ArgumentOutOfRangeException(nameof(position), "Point is outside the map");
+
+        Fields[position.X, position.Y] ??= new List<Creature>();
+        return Fields[position.X, position.Y]!;
+    }
+
+    public List<Creature> At(int x, int y) => At(new Point(x, y));
+
 }

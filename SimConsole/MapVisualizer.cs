@@ -33,8 +33,8 @@ public class MapVisualizer
             {
                 var point = new Point(x, y);
                 var creatures = map.At(new Point(x,y));
-                if (creatures.Count == 0)
-                    Console.Write(' ');
+                if (creatures.Count > 1)
+                    Console.Write('X');
                 else if (creatures.Count == 1)
                 {
                     var creature = creatures[0];
@@ -42,10 +42,10 @@ public class MapVisualizer
                 }
                 else
                 {
-                    Console.Write('X'); // Multiple creatures
+                    Console.Write(' '); 
                 }
             }
-            Console.WriteLine(Box.Vertical); // Right border
+            Console.WriteLine(Box.Vertical); 
         }
 
         Console.Write(Box.BottomLeft);

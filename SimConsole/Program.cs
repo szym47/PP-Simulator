@@ -17,5 +17,17 @@ internal class Program
 
         Simulation simulation = new(map, creatures, points, moves);
         MapVisualizer mapVisualizer = new(simulation.Map);
+        while (!simulation.Finished)
+        {
+            Console.Clear();
+            mapVisualizer.Draw();
+            Console.WriteLine($"Current move: {simulation.CurrentMoveName}");
+            simulation.Turn();
+            Thread.Sleep(1000);
+        }
+
+        Console.Clear();
+        mapVisualizer.Draw();
+        Console.WriteLine("Simulation finished!");
     }
 }

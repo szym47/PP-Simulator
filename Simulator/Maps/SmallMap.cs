@@ -13,7 +13,14 @@ public abstract class SmallMap : Map
         {
             throw new ArgumentOutOfRangeException(nameof(sizeY), "Height too big");
         }
-        fields= new List<Creature>[sizeX, sizeY];  
+        fields = new List<Creature>[sizeX, sizeY];
+        for (int x = 0; x < sizeX; x++)
+        {
+            for (int y = 0; y < sizeY; y++)
+            {
+                fields[x, y] = new List<Creature>();
+            }
+        }
     }
     protected override List<Creature>?[,] Fields => fields;
 }
