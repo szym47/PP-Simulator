@@ -19,7 +19,6 @@ public class MapVisualizer
         int width = map.SizeX;
         int height = map.SizeY;
 
-        // Draw top border
         Console.Write(Box.TopLeft);
         for (int x = 0; x < width; x++)
             Console.Write(Box.Horizontal);
