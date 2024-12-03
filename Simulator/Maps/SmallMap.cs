@@ -63,5 +63,4 @@ public abstract class SmallMap : Map
         return Fields[position.X, position.Y]!;
     }
 
-    public List<IMappable> At(int x, int y) => At(new Point(x, y));
 }

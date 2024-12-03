@@ -12,7 +12,7 @@ public class Simulation
     /// <summary>
     /// Creatures moving on the map.
     /// </summary>
-    public List<IMappable> Creatures { get; }
+    public List<IMappable> Mappables { get; }
 
     /// <summary>
     /// Starting positions of mappables.
@@ -31,19 +31,20 @@ public class Simulation
     /// <summary>
     /// Has all moves been done?
     /// </summary>
-    public bool Finished => currentMoveIndex >= Moves.Length;
+    public bool Finished { get; private set; } = false;
 
     /// <summary>
     /// IMappable which will be moving current turn.
     /// </summary>
-    public IMappable CurrentMappable => Creatures[currentMoveIndex % Creatures.Count];
+    public IMappable CurrentMappable => Mappables[currentMoveIndex % Mappables.Count];
 
     /// <summary>
     /// Lowercase name of direction which will be used in current turn.
     /// </summary>
-    public string CurrentMoveName => Moves[currentMoveIndex % Moves.Length].ToString().ToLower();
-
     private int currentMoveIndex = 0;
+    private List<Direction> ParsedMoves { get; }
+    public string CurrentMoveName => ParsedMoves.Count > currentMoveIndex ? ParsedMoves[currentMoveIndex].ToString().ToLower() : string.Empty;
+
 
     /// <summary>
     /// Simulation constructor.
@@ -62,10 +63,20 @@ public class Simulation
             throw new ArgumentException("Moves cannot be null or empty.", nameof(moves));
 
         Map = map;
-        Creatures = mappables;
+        Mappables = mappables;
         Positions = positions;
         Moves = moves;
 
+        ParsedMoves = Moves
+           .Select(c => DirectionParser.Parse(c.ToString().ToLower()))
+           .Where(d => d != null && d.Count > 0)
+           .Select(d => d[0])
+           .ToList();
+
+        if (ParsedMoves.Count == 0)
+        {
+            throw new ArgumentException("Moves must contain at least one valid direction.");
+        }
         // Assign mappables to the map at their starting positions
         for (int i = 0; i < mappables.Count; i++)
         {
@@ -88,17 +99,16 @@ public class Simulation
         if (Finished)
             throw new InvalidOperationException("Simulation is finished. ");
 
-        var currentDirections = DirectionParser.Parse(CurrentMoveName);
+       Direction direction = ParsedMoves[currentMoveIndex];
+       CurrentMappable.Go(direction);
 
-        if (currentDirections != null && currentDirections.Any())
+        currentMoveIndex++;
+        
+        if (currentMoveIndex >= ParsedMoves.Count)
         {
-            foreach (var direction in currentDirections)
-            {
-                CurrentMappable.Go(direction);
-            }
+            Finished = true;
+            return;
         }
 
-        // Move to the next turn
-        currentMoveIndex++;
     }
 }

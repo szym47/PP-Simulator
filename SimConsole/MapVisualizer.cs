@@ -28,7 +28,7 @@ public class MapVisualizer
         }
         Console.WriteLine(Box.TopRight);
 
-        for (int y = 0; y < height; y++)
+        for (int y = height-1; y >= 0; y--)
         {
             Console.Write(Box.Vertical); 
 
@@ -53,7 +53,7 @@ public class MapVisualizer
             }
             Console.WriteLine(Box.Vertical);
 
-            if (y < height-1)
+            if (y >0)
             {
                 Console.Write(Box.MidLeft);
                 for (int x = 0; x < width; x++)
