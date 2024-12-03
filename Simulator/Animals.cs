@@ -1,25 +1,50 @@
-﻿using System.Drawing;
+﻿using Simulator.Maps;
+using System.Drawing;
 
 namespace Simulator;
 
-public class Animals
+public class Animals : IMappable
 {
     private string description = "Unknown";
-    public required string Description
+    public Map? Maps { get; private set; }
+    public Point Position { get; set; }
+
+    public string Description
     {
         get => description;
-        init
+        init=> description = Validator.Shortener(value, 3, 15, '#');
+    }
+
+    public int Size { get; set; } = 3;
+    public virtual string Info => $"{Description} <{Size}>";
+    public override string ToString()=> $"{GetType().Name.ToUpper()}: {Info}";
+    
+    public virtual char Symbol => 'A';
+    public void InitMapAndPosition(Map map, Point position)
+    {
+        if (!map.Exist(position))
+            throw new ArgumentOutOfRangeException(nameof(position), "Point is outside the map bounds");
+
+        Maps = map;
+        Position = position;
+
+        ((SmallMap)map).Add(this, position);
+    }
+
+    public virtual void Go(Direction direction)
+    {
+        if (Maps == null) throw new InvalidOperationException("Map is not initialized.");
+        var nextPosition = Maps.Next(Position, direction);
+        if (Maps.Exist(nextPosition))
         {
-            description = Validator.Shortener(value, 3, 15, '#');
+            Maps.Move(this, Position, nextPosition);
+            Position = nextPosition;
         }
     }
 
-    public uint Size { get; set; } = 3;
-
- 
-    public virtual string Info => $"{Description} <{Size}>";
-    public override string ToString()
+    public Animals(string Description, int size)
     {
-        return $"{GetType().Name.ToUpper()}: {Info}";
+        Description = description;
+        Size = size;
     }
 }

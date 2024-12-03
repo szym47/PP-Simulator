@@ -1,23 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Simulator.Maps;
 
-namespace Simulator
+namespace Simulator;
+
+public class Birds : Animals
 {
-    internal class Birds : Animals
-    {
-        private bool canFly = true;
-        public bool CanFly { get { return canFly; } init { value = canFly; } }
+    public bool CanFly { get; init; } = true;
+    public override char Symbol => CanFly ? 'B' : 'b';
 
-        public override string Info
+    public Birds(string description = "Unknown Bird", int size=3, bool canFly=true) : base(description, size) 
+    {
+        CanFly = canFly;
+    }
+
+    public override string Info
+    {
+        get
         {
-            get
-            {
-                string flying_skill = canFly ? "fly+" : "fly-";
-                return $"{Description} ({flying_skill}) <{Size}>";
-            }
+            string flying_skill = CanFly ? "fly+" : "fly-";
+            return $"{Description} ({flying_skill}) <{Size}>";
+        }
+    }
+    public override void Go(Direction direction)
+    {
+        if (Maps == null) throw new InvalidOperationException("Map is not initialized.");
+        var nextPosition = CanFly?  Maps.Next(Maps.Next(Position,direction), direction) : Maps.NextDiagonal(Position, direction);
+        if (Maps.Exist(nextPosition))
+        {
+            Maps.Move(this, Position, nextPosition);
+            Position = nextPosition;
         }
     }
 }

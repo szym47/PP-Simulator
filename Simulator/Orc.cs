@@ -4,8 +4,8 @@ namespace Simulator;
 
 public class Orc : Creature
 {
+    public override char Symbol => 'O';
     private int rage = 1;
-    
     public int Rage { get => rage; init => rage = Validator.Limiter(value, 0, 10); }
     
     private int count = 0;
