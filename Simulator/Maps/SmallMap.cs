@@ -60,5 +60,27 @@ public abstract class SmallMap : Map
         Fields[position.X, position.Y] ??= new List<IMappable>();
         return Fields[position.X, position.Y]!;
     }
+    public override Map Copy()
+    {
+        // Tworzymy nową instancję mapy korzystając z konstruktora klasy
+        var copy = (BigMap)Activator.CreateInstance(GetType(), SizeX, SizeY)!;
+
+        for (int x = 0; x < SizeX; x++)
+        {
+            for (int y = 0; y < SizeY; y++)
+            {
+                if (Fields[x, y] != null)
+                {
+                    // Kopiujemy wszystkie elementy z danego pola
+                    foreach (var mappable in Fields[x, y]!)
+                    {
+                        copy.Add(mappable, new Point(x, y));
+                    }
+                }
+            }
+        }
+
+        return copy;
+    }
 
 }

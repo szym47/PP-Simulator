@@ -12,6 +12,11 @@ public class SmallTorusMap : SmallMap
     public override Point Next(Point p, Direction d, object entity = null) =>ToTorus(p.Next(d));
 
     public override Point NextDiagonal(Point p, Direction d) => ToTorus(p.NextDiagonal(d));
+    public override Map Copy()
+    {
+        var copy = (SmallTorusMap)base.Copy();
+        return copy;
+    }
 
 }
 

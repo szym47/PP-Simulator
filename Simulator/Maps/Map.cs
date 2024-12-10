@@ -56,5 +56,8 @@ public abstract class Map
     public abstract void Move(IMappable mappable, Point from, Point to);
     
     public abstract List<IMappable> At(Point position);
-
+    /// <summary>
+    /// Tworzy kopię mapy.
+    /// </summary>
+    public abstract Map Copy();
 }

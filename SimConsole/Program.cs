@@ -10,10 +10,8 @@ internal class Program
     {
         Console.OutputEncoding = Encoding.UTF8;
 
-        // Utwórz BigBounceMap o wymiarach 8x6
         BigBounceMap map = new(8, 6);
 
-        // Lista obiektów na mapie
         List<IMappable> creatures = new List<IMappable>
         {
             new Elf("Elf Warrior", 3),
@@ -23,36 +21,46 @@ internal class Program
             new Birds("Ostriches", 4, false)
         };
 
-        // Pozycje początkowe (zlokalizowane blisko lub na krawędziach mapy)
         List<Point> points = new List<Point>
         {
-            new(0, 0), // Elf
-            new(7, 0), // Orc
-            new(3, 3), // Rabbits
-            new(1, 5), // Eagles
-            new(4, 5)  // Ostriches
+            new(0, 0),
+            new(7, 0),
+            new(3, 3),
+            new(1, 5),
+            new(4, 5)
         };
 
-        // Ruchy (zapewniają testowanie odbijania i ruchów skośnych)
-        string moves = "uuurrrddlldduuullllrrrd"; // 20 ruchów
+        string moves = "uuurrrddlldduuullllr";
 
-        // Inicjalizacja symulacji
         Simulation simulation = new(map, creatures, points, moves);
+        SimulationHistory history = new(simulation);
         MapVisualizer mapVisualizer = new(simulation.Map);
 
-        // Pętla symulacji
         while (!simulation.Finished)
         {
             Console.Clear();
-            Console.WriteLine($"Turn {simulation.CurrentMappable}: {simulation.CurrentMoveName}");
+            Console.WriteLine($"Turn {simulation.TurnNumber}: {simulation.CurrentMappable} moves {simulation.CurrentMoveName}");
             mapVisualizer.Draw();
             simulation.Turn();
             Thread.Sleep(1500);
         }
 
-        // Końcowe wyświetlenie
         Console.Clear();
         mapVisualizer.Draw();
         Console.WriteLine("Simulation finished!");
+
+        Console.WriteLine("\nSimulation History Review:");
+        foreach (var turn in new[] { 5, 10, 15, 20 })
+        {
+            var snapshot = history.GetSnapshot(turn);
+            Console.WriteLine($"\nTurn {snapshot.TurnNumber}:");
+            MapVisualizer visualizer = new(snapshot.MapState);
+            visualizer.Draw();
+            Console.WriteLine($"Current Move: {snapshot.CurrentMove}");
+            Console.WriteLine($"Current Mappable: {snapshot.CurrentMappable}");
+            Console.WriteLine();
+        }
+
+        Console.WriteLine("Simulation history review finished!");
     }
 }

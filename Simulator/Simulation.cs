@@ -1,6 +1,5 @@
 ﻿using Simulator.Maps;
-
-namespace Simulator;
+using Simulator;
 
 public class Simulation
 {
@@ -45,14 +44,11 @@ public class Simulation
     private List<Direction> ParsedMoves { get; }
     public string CurrentMoveName => ParsedMoves.Count > currentMoveIndex ? ParsedMoves[currentMoveIndex].ToString().ToLower() : string.Empty;
 
-
     /// <summary>
-    /// Simulation constructor.
-    /// Throw errors:
-    /// if mappables' list is empty,
-    /// if number of mappables differs from 
-    /// number of starting positions.
+    /// The current turn number, starting from 1.
     /// </summary>
+    public int TurnNumber => currentMoveIndex + 1;
+
     public Simulation(Map map, List<IMappable> mappables, List<Point> positions, string moves)
     {
         if (mappables.Count == 0)
@@ -90,25 +86,24 @@ public class Simulation
         }
     }
 
-
     /// <summary>
     /// Makes one move of current mappable in current direction.
     /// Throw error if simulation is finished.
     /// </summary>
-    public void Turn() {
+    public void Turn()
+    {
         if (Finished)
             throw new InvalidOperationException("Simulation is finished. ");
 
-       Direction direction = ParsedMoves[currentMoveIndex];
-       CurrentMappable.Go(direction);
+        Direction direction = ParsedMoves[currentMoveIndex];
+        CurrentMappable.Go(direction);
 
         currentMoveIndex++;
-        
+
         if (currentMoveIndex >= ParsedMoves.Count)
         {
             Finished = true;
             return;
         }
-
     }
 }
