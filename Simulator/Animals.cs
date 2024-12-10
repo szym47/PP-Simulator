@@ -28,7 +28,7 @@ public class Animals : IMappable
         Maps = map;
         Position = position;
 
-        ((SmallMap)map).Add(this, position);
+        map.Add(this, position);
     }
 
     public virtual void Go(Direction direction)
@@ -42,7 +42,7 @@ public class Animals : IMappable
         }
     }
 
-    public Animals(string Description, int size)
+    public Animals(string description, int size)
     {
         Description = description;
         Size = size;

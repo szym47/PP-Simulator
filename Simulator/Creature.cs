@@ -45,7 +45,7 @@ public abstract class Creature : IMappable
         Maps = map;
         Position = position;
 
-        ((SmallMap) map).Add(this, position);
+        map.Add(this, position);
     }
     public void Go(Direction direction)
     {
@@ -55,7 +55,7 @@ public abstract class Creature : IMappable
         var newPosition = Maps.Next(Position.Value, direction);
         if (!newPosition.Equals(Position.Value))
         {
-            ((SmallMap)Maps).Move(this, Position.Value, newPosition);
+            Maps.Move(this, Position.Value, newPosition);
             Position = newPosition;
         }
     }

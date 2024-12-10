@@ -1,6 +1,4 @@
-﻿using Simulator.Maps;
-
-namespace Simulator.Maps;
+﻿namespace Simulator.Maps;
 
 public abstract class SmallMap : Map
 {

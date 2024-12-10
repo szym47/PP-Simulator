@@ -10,40 +10,47 @@ internal class Program
     {
         Console.OutputEncoding = Encoding.UTF8;
 
-        SmallTorusMap map = new(8, 6);
+        // Utwórz BigBounceMap o wymiarach 8x6
+        BigBounceMap map = new(8, 6);
 
+        // Lista obiektów na mapie
         List<IMappable> creatures = new List<IMappable>
         {
-            new Orc("Gorbag"),
-            new Elf("Elandor"),
-            new Animals("Rabbit", 10), 
-            new Birds("Eagle", 5, true), 
-            new Birds("Ostrich", 4, false) 
+            new Elf("Elf Warrior", 3),
+            new Orc("Orc Berserker", 5),
+            new Animals("Rabbits", 5),
+            new Birds("Eagles", 4, true),
+            new Birds("Ostriches", 4, false)
         };
 
+        // Pozycje początkowe (zlokalizowane blisko lub na krawędziach mapy)
         List<Point> points = new List<Point>
         {
-            new(2, 2), 
-            new(3, 1), 
-            new(1, 4), 
-            new(4, 4), 
-            new(5, 5) 
+            new(0, 0), // Elf
+            new(7, 0), // Orc
+            new(3, 3), // Rabbits
+            new(1, 5), // Eagles
+            new(4, 5)  // Ostriches
         };
 
-        string moves = "dlrldulurlldduu"; 
+        // Ruchy (zapewniają testowanie odbijania i ruchów skośnych)
+        string moves = "uuurrrddlldduuullllrrrd"; // 20 ruchów
 
+        // Inicjalizacja symulacji
         Simulation simulation = new(map, creatures, points, moves);
         MapVisualizer mapVisualizer = new(simulation.Map);
 
+        // Pętla symulacji
         while (!simulation.Finished)
         {
             Console.Clear();
+            Console.WriteLine($"Turn {simulation.CurrentMappable}: {simulation.CurrentMoveName}");
             mapVisualizer.Draw();
-            Console.WriteLine($"Current move: {simulation.CurrentMoveName}");
             simulation.Turn();
             Thread.Sleep(1500);
         }
 
+        // Końcowe wyświetlenie
         Console.Clear();
         mapVisualizer.Draw();
         Console.WriteLine("Simulation finished!");

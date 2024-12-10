@@ -38,7 +38,7 @@ public abstract class Map
     /// <param name="p">Starting point.</param>
     /// <param name="d">Direction.</param>
     /// <returns>Next point.</returns>
-    public abstract Point Next(Point p, Direction d);
+    public abstract Point Next(Point p, Direction d, object entity = null);
 
     /// <summary>
     /// Next diagonal position to the point in a given direction 

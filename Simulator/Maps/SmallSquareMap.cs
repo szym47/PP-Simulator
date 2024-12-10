@@ -2,10 +2,10 @@
 
 public class SmallSquareMap : SmallMap
 {
-    public SmallSquareMap(int size) : base(size, size) { }
+    public SmallSquareMap(int size,object entity=null) : base(size, size) { }
 
 
-    public override Point Next(Point p, Direction d)
+    public override Point Next(Point p, Direction d, object entity = null)
     {
         Point next;
         if (Exist(p))
