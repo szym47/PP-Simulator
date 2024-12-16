@@ -64,9 +64,4 @@ public class SmallSquareMap : SmallMap
         }
         return p;
     }
-    public override Map Copy()
-    {
-        var copy = (SmallSquareMap)base.Copy();
-        return copy;
-    }
 }

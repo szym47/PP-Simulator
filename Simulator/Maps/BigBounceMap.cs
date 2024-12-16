@@ -84,10 +84,4 @@ public class BigBounceMap : BigMap
 
         return newPosition;
     }
-    public override Map Copy()
-    {
-        var copy = (BigBounceMap)base.Copy();
-        return copy;
-    }
-
 }
