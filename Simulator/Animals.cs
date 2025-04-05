@@ -1,50 +1,52 @@
 ﻿using Simulator.Maps;
-using System.Drawing;
+using System.Reflection.Emit;
+using System.Text.Json.Serialization;
+using System.Xml.Linq;
 
 namespace Simulator;
 
 public class Animals : IMappable
 {
-    private string description = "Unknown";
-    public Map? Maps { get; private set; }
+    public Map? Map { get; private set; }
     public Point Position { get; set; }
+    private string description = "Unknown";
 
     public string Description
     {
         get => description;
-        init=> description = Validator.Shortener(value, 3, 15, '#');
-    }
-
-    public int Size { get; set; } = 3;
-    public virtual string Info => $"{Description} <{Size}>";
-    public override string ToString()=> $"{GetType().Name.ToUpper()}: {Info}";
-    
-    public virtual char Symbol => 'A';
-    public void InitMapAndPosition(Map map, Point position)
-    {
-        if (!map.Exist(position))
-            throw new ArgumentOutOfRangeException(nameof(position), "Point is outside the map bounds");
-
-        Maps = map;
-        Position = position;
-
-        map.Add(this, position);
-    }
-
-    public virtual void Go(Direction direction)
-    {
-        if (Maps == null) throw new InvalidOperationException("Map is not initialized.");
-        var nextPosition = Maps.Next(Position, direction);
-        if (Maps.Exist(nextPosition))
+        init
         {
-            Maps.Move(this, Position, nextPosition);
-            Position = nextPosition;
+            description = Validator.Shortener(value, 3, 15, '#');
+            description = char.ToUpper(description[0]) + description.Substring(1).ToLower();
         }
     }
-
+    public int Size { get; set; } = 3;
+    [JsonIgnore] public virtual string Info => $"{Description} <{Size}>";
+    [JsonIgnore] public virtual char Symbol => 'A';
+    public Animals() { }
     public Animals(string description, int size)
     {
         Description = description;
         Size = size;
+    }
+    public virtual void Go(Direction direction)
+    {
+        if (Map == null)
+            return;
+
+        Point nextPosition = Map.Next(Position, direction);
+        Map.Move((IMappable)this, Position, nextPosition);
+        Position = nextPosition;
+    }
+
+    public void InitMapAndPosition(Map map, Point position)
+    {
+        Map = map;
+        Position = position;
+    }
+
+    public override string ToString()
+    {
+        return $"{GetType().Name.ToUpper()}: {Info}";
     }
 }

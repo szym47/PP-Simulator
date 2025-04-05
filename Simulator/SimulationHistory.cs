@@ -1,54 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using Simulator.Maps;
+﻿using Simulator;
 
-namespace Simulator
+public class SimulationHistory
 {
-    public class SimulationHistory
+    private Simulation _simulation { get; }
+    public int SizeX { get; }
+    public int SizeY { get; }
+    public List<SimulationTurnLog> TurnLogs { get; } = [];
+    // store starting positions at index 0
+
+    public SimulationHistory(Simulation simulation)
     {
-        private readonly List<SimulationSnapshot> _snapshots = new();
-
-        public SimulationHistory(Simulation simulation)
-        {
-            while (!simulation.Finished)
-            {
-                // Create a snapshot of the current simulation state
-                var snapshot = new SimulationSnapshot(
-                    mapState: simulation.Map.Copy(),
-                    currentMappable: simulation.CurrentMappable,
-                    currentMove: simulation.CurrentMoveName,
-                    turnNumber: simulation.TurnNumber
-                );
-
-                _snapshots.Add(snapshot);
-                simulation.Turn(); // Advance the simulation to the next turn
-            }
-        }
-
-        public SimulationSnapshot GetSnapshot(int turnNumber)
-        {
-            if (turnNumber < 1 || turnNumber > _snapshots.Count)
-                throw new ArgumentOutOfRangeException(nameof(turnNumber), "Invalid turn number.");
-
-            return _snapshots[turnNumber - 1];
-        }
-
-        public IEnumerable<SimulationSnapshot> Snapshots => _snapshots;
+        _simulation = simulation ??
+            throw new ArgumentNullException(nameof(simulation));
+        SizeX = _simulation.Map.SizeX;
+        SizeY = _simulation.Map.SizeY;
+        Run();
     }
 
-    public class SimulationSnapshot
+    private void Run()
     {
-        public Map MapState { get; }
-        public IMappable CurrentMappable { get; }
-        public string CurrentMove { get; }
-        public int TurnNumber { get; }
-
-        public SimulationSnapshot(Map mapState, IMappable currentMappable, string currentMove, int turnNumber)
+        while (!_simulation.Finished)
         {
-            MapState = mapState;
-            CurrentMappable = currentMappable;
-            CurrentMove = currentMove;
-            TurnNumber = turnNumber;
+            _simulation.Turn();
+
+            var symbols = new Dictionary<Point, List<char>>();
+            foreach (var mappable in _simulation.IMappables)
+            {
+                if (!symbols.ContainsKey(mappable.Position))
+                {
+                    symbols[mappable.Position] = new List<char>();
+                }
+                symbols[mappable.Position].Add(mappable.Symbol);
+            }
+
+            var log = new SimulationTurnLog
+            {
+                Mappable = _simulation.CurrentMappable.ToString(),
+                Move = _simulation.CurrentMoveName,
+                Symbols = symbols
+            };
+
+            TurnLogs.Add(log);
         }
     }
 }

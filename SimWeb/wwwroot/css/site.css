@@ -1,0 +1,76 @@
+/* Paleta kolorów */
+:root {
+    --light-color: #CCC5BD;
+    --dark-color: #85858E;
+    --middle-color: #8D9890;
+    --accent-color: #6F7C67;
+}
+
+body, header h1, div, p {
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    font-size: 16px;
+}
+
+body {
+    display: grid;
+    grid-template-rows: min-content 1fr min-content;
+    min-height: 100vh;
+    background-color: var(--light-color);
+}
+
+header {
+    grid-column: 1 / -1;
+    padding: 1rem;
+    background-color: var(--accent-color);
+    color: var(--light-color);
+    display: flex;
+    align-items: center;
+    border-bottom: 3px solid var(--light-color);
+}
+
+    header h1 {
+        padding-right: 2rem;
+        color: #F4E1A1;
+        font-size: 1.8rem;
+    }
+
+    header nav a, header nav span {
+        margin-left: 1em;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+
+    header nav a {
+        text-decoration: none;
+        color: var(--light-color);
+        padding: 0.4rem;
+    }
+
+    header nav span {
+        color: var(--light-color);
+    }
+
+
+main {
+    grid-column: 1 / -1;
+    padding: 5rem;
+    background-color: var(--dark-color);
+    color: var(--light-color);
+    overflow-x: auto;
+    text-align: center;
+}
+
+
+footer {
+    grid-column: 1 / -1;
+    font-size: .8rem;
+    padding: .4rem;
+    background-color: var(--middle-color);
+    color: var(--light-color);
+    text-align: center;
+}

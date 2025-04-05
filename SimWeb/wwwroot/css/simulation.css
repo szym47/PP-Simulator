@@ -1,0 +1,83 @@
+/* Mapa */
+.map {
+    display: grid;
+    grid-template-columns: max-content repeat(8, max-content);
+    grid-template-rows: repeat(6, 1fr) max-content;
+    max-width: 800px;
+    max-height: 600px;
+    margin: 0 auto;
+    justify-content: center;
+    gap: 1rem;
+}
+
+    .map > div {
+        background-color: #A5BFA2;
+        outline: 1px dashed #112d4e;
+        min-width: 80px;
+        aspect-ratio: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+    }
+
+        .map > div:hover {
+            background-color: #B0C39E;
+        }
+
+    .map > p {
+        padding-right: .4rem;
+    }
+
+    .map > span {
+        padding-top: .2rem;
+    }
+
+/* Map Header */
+.map-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    font-weight: 700;
+    text-align: center;
+    font-size: 1.2rem;
+    margin-left: 1rem;
+    color: var(--dark-color);
+}
+
+/* Turn Display */
+.turn {
+    min-width: 11rem;
+    padding: 1rem;
+    background-color: var(--middle-color);
+    color: var(--light-color);
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Styling */
+button {
+    min-width: 4rem;
+    min-height: 3rem;
+    font-size: 1.6rem;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    button:hover {
+        background-color: #5B6D52;
+    }
+
+/* Image Styling */
+img {
+    max-width: 4rem;
+    max-height: 4rem;
+    border-radius: 50%;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}

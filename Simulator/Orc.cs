@@ -1,18 +1,18 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Text.Json.Serialization;
 
 namespace Simulator;
 
 public class Orc : Creature
 {
-    public override char Symbol => 'O';
     private int rage = 1;
+    private int huntCounter = 0;
+
     public int Rage { get => rage; init => rage = Validator.Limiter(value, 0, 10); }
-    
-    private int count = 0;
+    [JsonIgnore] public override int Power => 7 * Level + 3 * Rage;
     public void Hunt()
     {
-        count++;
-        if (count % 2 == 0)
+        huntCounter++;
+        if (huntCounter % 2 == 0)
         {
             if (rage < 10)
             {
@@ -20,17 +20,11 @@ public class Orc : Creature
             }
         }
     }
-
-    public override int Power => 7 * Level + 3 * Rage;
-
     public Orc() { }
     public Orc(string name = "Unknown Orc", int level = 1, int rage = 1) : base(name, level)
     {
         Rage = rage;
     }
-
-    public override string Info => $" {Name} [{Level}][{Rage}]";
-    public override string Greeting() {
-        return($"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}");
-    }
+    [JsonIgnore] public override string Info => $"{Name} [{Level}][{Rage}]";
+    [JsonIgnore] public override char Symbol => 'O';
 }

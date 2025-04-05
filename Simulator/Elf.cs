@@ -1,18 +1,17 @@
-﻿using System;
+﻿using System.Text.Json.Serialization;
 
 namespace Simulator;
 
 public class Elf : Creature
 {
-    public override char Symbol => 'E';
     private int agility = 1;
+    private int singCounter = 0;
     public int Agility { get => agility; init => agility = Validator.Limiter(value, 0, 10); }
-
-    private int count = 0;
+    [JsonIgnore] public override int Power => 8 * Level + 2 * Agility;
     public void Sing()
     {
-        count++;
-        if (count % 3 == 0)
+        singCounter++;
+        if (singCounter % 3 == 0)
         {
             if (agility < 10)
             {
@@ -21,16 +20,12 @@ public class Elf : Creature
         }
     }
 
-    public override int Power => 8 * Level + 2 * Agility;
-
     public Elf() { }
     public Elf(string name = "Unknown Elf", int level = 1, int agility = 1) : base(name, level)
     {
         Agility = agility;
     }
-    public override string Greeting()
-    {
-        return($"Hi, I'm {Name}, my level is {Level}, my agility is {Agility}");
-    }
-    public override string Info => $" {Name} [{Level}][{Agility}]";
+    [JsonIgnore] public override string Info => $"{Name} [{Level}][{Agility}]";
+
+    [JsonIgnore] public override char Symbol => 'E';
 }

@@ -1,51 +1,35 @@
-﻿namespace Simulator;
+﻿using System.Text.Json.Serialization;
+
+namespace Simulator;
 
 public readonly struct Point
 {
-    public readonly int X, Y;
-    public Point(int x, int y) => (X, Y) = (x, y);
+    [JsonInclude] public readonly int X, Y;
+    [JsonConstructor] public Point(int x, int y) => (X, Y) = (x, y);
     public override string ToString() => $"({X}, {Y})";
 
     public Point Next(Direction direction)
     {
-        switch (direction)
+        return direction switch
         {
-            case Direction.Up:
-                return new Point(X, Y + 1);
-
-            case Direction.Down:
-                return new Point(X, Y - 1);
-
-            case Direction.Left:
-                return new Point(X - 1, Y);
-
-            case Direction.Right:
-                return new Point(X + 1, Y);
-
-            default:
-                return new Point(X, Y);
-        }
+            Direction.Up => new Point(X, Y + 1),
+            Direction.Right => new Point(X + 1, Y),
+            Direction.Down => new Point(X, Y - 1),
+            Direction.Left => new Point(X - 1, Y),
+            _ => default,
+        };
     }
 
     // rotate given direction 45 degrees clockwise
     public Point NextDiagonal(Direction direction)
     {
-        switch (direction)
+        return direction switch
         {
-            case Direction.Up:
-                return new Point(X + 1, Y + 1);
-
-            case Direction.Down:
-                return new Point(X - 1, Y - 1);
-
-            case Direction.Left:
-                return new Point(X - 1, Y + 1);
-
-            case Direction.Right:
-                return new Point(X + 1, Y - 1);
-
-            default:
-                return new Point(X, Y);
-        }
+            Direction.Up => new Point(X + 1, Y + 1),
+            Direction.Right => new Point(X + 1, Y - 1),
+            Direction.Down => new Point(X - 1, Y - 1),
+            Direction.Left => new Point(X - 1, Y + 1),
+            _ => default,
+        };
     }
 }
